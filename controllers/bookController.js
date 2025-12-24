@@ -3,9 +3,11 @@ const { sendSuccess, sendError } = require('../utils/response');
 
 exports.createBook = async (req, res) => {
   try {
-    const totalBooks = await Book.countDocuments();
-    req.body.id = totalBooks + 1; 
-    console.log(req.body);
+    const lastBook = await Book.findOne().sort({ id: -1 });
+
+    const nextId = lastBook ? lastBook.id + 1 : 1;
+    req.body.id = nextId; 
+    // console.log(req.body);
     const book = await Book.create(req.body);
     sendSuccess(res, book, 201);
   } catch (err) {

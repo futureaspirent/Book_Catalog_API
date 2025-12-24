@@ -67,7 +67,7 @@ exports.validateBook = [
   handleValidation
 ];
 
-// Book Update - Partial updates ALLOWED
+
 exports.validateBookUpdate = [
   body('title')
     .optional()

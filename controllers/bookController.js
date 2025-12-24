@@ -3,6 +3,9 @@ const { sendSuccess, sendError } = require('../utils/response');
 
 exports.createBook = async (req, res) => {
   try {
+    const totalBooks = await Book.countDocuments();
+    req.body.id = totalBooks + 1; 
+    console.log(req.body);
     const book = await Book.create(req.body);
     sendSuccess(res, book, 201);
   } catch (err) {
@@ -21,7 +24,7 @@ exports.getAllBooks = async (req, res) => {
 
 exports.getBookById = async (req, res) => {
   try {
-    const book = await Book.findById(req.params.id);
+    const book = await Book.findOne({ id: req.params.id });
     if (!book) return sendError(res, 'Not found', 404);
     sendSuccess(res, book);
   } catch (err) {
@@ -31,7 +34,7 @@ exports.getBookById = async (req, res) => {
 
 exports.updateBook = async (req, res) => {
   try {
-    const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const book = await Book.findOneAndUpdate({ id: req.params.id }, req.body, { new: true, runValidators: true });
     
     if (!book) return sendError(res, 'Not found', 404);
     sendSuccess(res, book);
@@ -43,7 +46,7 @@ exports.updateBook = async (req, res) => {
 
 exports.deleteBook = async (req, res) => {
   try {
-    const book = await Book.findByIdAndDelete(req.params.id);
+    const book = await Book.findOneAndDelete({ id: req.params.id });
     if (!book) return sendError(res, 'Not found', 404);
     sendSuccess(res, { message: 'Deleted' });
   } catch (err) {

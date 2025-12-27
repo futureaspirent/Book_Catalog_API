@@ -25,8 +25,6 @@ app.use('/api/books', bookRoutes);
 app.get("/", (req, res) => {
   res.send("Backend server is running");
 });
-
-
 app.use(errorHandler); 
 
 const PORT = process.env.PORT || 5000;
